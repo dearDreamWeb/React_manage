@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 import "./index.scss";
 import { Layout, Menu } from 'antd';
 import { HomeOutlined, ApartmentOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons';
@@ -7,8 +7,8 @@ import { HomeOutlined, ApartmentOutlined, UnorderedListOutlined, UserOutlined } 
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 class NavSide extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
             // 左侧列表数据
             subMenuList: [
@@ -40,12 +40,24 @@ class NavSide extends React.Component {
                         { key: "4", activeRouter: "/users/manage", title: "用户管理" }
                     ]
                 }
-            ]
+            ],
+            // 选中的元素
+            selectedItem: ["0"]
         }
     }
-    changeRouter() {
-        this.props.history.push('/child02')
+    componentWillMount() {
+        // 遍历一下所有的菜单对应的路由，再根据地址栏的地址核对是哪个菜单，将其设为默认选项
+        this.state.subMenuList.forEach(item => {
+            item.items.forEach(item1 => {
+                if (item1.activeRouter === this.props.history.location.pathname) {
+                    this.setState({
+                        selectedItem: [item1.key]
+                    })
+                }
+            })
+        })
     }
+
     render() {
         return (
             <div className="navSide">
@@ -53,10 +65,15 @@ class NavSide extends React.Component {
                     <Menu
                         theme="dark"
                         mode="inline"
-                        defaultSelectedKeys={['0']}
+                        defaultSelectedKeys={this.state.selectedItem}
                         defaultOpenKeys={['sub1', 'sub2', 'sub3']}
                     >
-                        <Menu.Item key="0" icon={<HomeOutlined />} >首页</Menu.Item>
+                        <Menu.Item key="0"
+                            icon={<HomeOutlined />}
+                            onClick={() => this.props.history.push("/")}
+                        >首页
+                        </Menu.Item>
+
                         {/* 遍历列表数据 */}
                         {this.state.subMenuList.map(item => {
                             return (
@@ -93,4 +110,4 @@ class NavSide extends React.Component {
         )
     }
 }
-export default NavSide;
+export default withRouter(NavSide);

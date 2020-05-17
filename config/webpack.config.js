@@ -332,7 +332,7 @@ module.exports = function(webpackEnv) {
           use: [
             {
               options: {
-                cache: false,
+                cache: true,
                 formatter: require.resolve('react-dev-utils/eslintFormatter'),
                 eslintPath: require.resolve('eslint'),
                 resolvePluginsRelativeTo: __dirname,
