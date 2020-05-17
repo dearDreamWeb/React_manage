@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Checkbox, Row, Col } from 'antd';
+import { Form, Input, Button, Checkbox, Row, Col, message } from 'antd';
 import "./index.scss";
 import RSA from "../../rsa/index";  //RSA加密
 
@@ -29,6 +29,9 @@ const Login = (props) => {
     const onFinish = values => {
         // 使用RSA加密
         window.localStorage.setItem("userInfo", RSA.encrypt(JSON.stringify(values)));
+        window.localStorage.setItem("isLogin", true);
+        message.success("登录成功");
+        props.history.push("/");
     };
 
     // 输入框有错误

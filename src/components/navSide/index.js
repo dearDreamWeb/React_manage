@@ -2,7 +2,7 @@ import React from "react";
 import { NavLink, withRouter } from "react-router-dom";
 import "./index.scss";
 import { Layout, Menu } from 'antd';
-import { HomeOutlined, ApartmentOutlined, UnorderedListOutlined, UserOutlined } from '@ant-design/icons';
+import { HomeOutlined, UnorderedListOutlined, UserOutlined ,DiffOutlined} from '@ant-design/icons';
 
 const { SubMenu } = Menu;
 const { Sider } = Layout;
@@ -16,7 +16,7 @@ class NavSide extends React.Component {
                     title: "商品",
                     key: "sub1",
                     activeRouter: "/product",
-                    icon: <ApartmentOutlined />,
+                    icon: <UnorderedListOutlined />,
                     items: [
                         { key: "1", activeRouter: "/product/manage", title: "商品管理" },
                         { key: "2", activeRouter: "/product/categories", title: "分类管理" }
@@ -25,7 +25,7 @@ class NavSide extends React.Component {
                 {
                     title: "订单",
                     key: "sub2",
-                    icon: <UnorderedListOutlined />,
+                    icon: <DiffOutlined />,
                     activeRouter: "/order",
                     items: [
                         { key: "3", activeRouter: "/order/manage", title: "订单管理" }
