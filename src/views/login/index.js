@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Checkbox, Row, Col, message } from 'antd';
 import "./index.scss";
 import RSA from "../../rsa/index";  //RSA加密
+import axios from "axios";
 
 const layout = {
     // label的宽度
@@ -27,11 +28,30 @@ const Login = (props) => {
 
     // 输入框无误
     const onFinish = values => {
-        // 使用RSA加密
-        window.localStorage.setItem("userInfo", RSA.encrypt(JSON.stringify(values)));
-        window.localStorage.setItem("isLogin", true);
-        message.success("登录成功");
-        props.history.push("/");
+        // 把axios中的data数据变成FormData格式，因为这个接口就这样要求的
+        var params = new FormData();
+        params.append("username", values.username);
+        params.append("password", values.password);
+        axios({
+            method: "post",
+            url: "/manage/user/login.do",
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+            data: params
+        }).then(res => {
+            if (res.data.status === 0) {
+                // 使用RSA加密
+                window.localStorage.setItem("userInfo", RSA.encrypt(JSON.stringify(values)));
+                window.localStorage.setItem("isLogin", true);
+                message.success("登录成功");
+                props.history.push("/");
+            }else {
+                message.warning("请输入正确的管理员账号和密码")
+            }
+        }).catch(err => {
+            console.log(err);
+        })
     };
 
     // 输入框有错误
@@ -79,7 +99,11 @@ const Login = (props) => {
                     </Form>
                 </Col>
             </Row>
-
+            <form action="/manage/user/login.do" method="post">
+                <input type="text" name="username"></input>
+                <input type="password" name="password"></input>
+                <button type="submit">提交</button>
+            </form>
         </div>
     );
 };
