@@ -19,6 +19,7 @@ function App() {
               <Route path="/product/categories" component={Home}></Route>
               <Route path="/order/manage" component={Home}></Route>
               <Route path="/users/manage" component={Home}></Route>
+              <Route path="/users/list" component={Home}></Route>
               <Route component={NotFound}></Route>
             </Switch>
           )}>

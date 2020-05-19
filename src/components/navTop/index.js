@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Layout, Menu, Dropdown } from 'antd';
+import { Layout, Menu, Dropdown, message } from 'antd';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import "./index.scss";
 import RSA from "../../rsa";
+import axios from "axios";
 
 const { Header } = Layout;
 
@@ -21,8 +22,17 @@ class NavTop extends React.Component {
 
     // 点击退出登录，清除用户名
     changeLoginState() {
-        window.localStorage.setItem("isLogin", false);
-        window.location.reload();
+        axios.post("/user/logout.do").then(res => {
+            if (res.data.status === 0) {
+                message.success("退出登录成功");
+                setTimeout(() => {
+                    window.localStorage.setItem("isLogin", false);
+                    window.location.reload();
+                }, 300)
+            }
+        }).catch(err => {
+            console.log(err);
+        })
     }
 
     // 初始化用户名
