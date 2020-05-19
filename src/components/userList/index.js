@@ -132,6 +132,7 @@ class UsersList extends React.Component {
             <div className="usersList">
                 <ContentTitle title="用户列表" />
                 <Table
+                    style={{ overflow: "auto" }}
                     columns={columns}
                     rowKey={() => Math.random() * 1000000}
                     dataSource={data}           // 用户数据

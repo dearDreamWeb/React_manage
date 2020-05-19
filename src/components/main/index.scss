@@ -1,6 +1,8 @@
 .main {
   .site-card-wrapper {
     .item {
+      margin: 0 auto;
+      width: 80%;
       .content-wrap {
         text-align: center;
         color: #fff;
@@ -17,6 +19,7 @@
         opacity: 0.8;
       }
       @media screen and (max-width: 578px) {
+        width: 100%;
         margin-bottom: 10px;
         .content-wrap {
           display: flex;
