@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import { Layout, Menu, Dropdown, message } from 'antd';
 import { DownOutlined, UserOutlined } from '@ant-design/icons';
 import "./index.scss";
@@ -46,8 +46,23 @@ class NavTop extends React.Component {
         }
     }
 
+    // 因为后台设置了用户登录时间，所以要刷新页面获取用户登录状态，若为登录，返回登录页面
+    isLogin() {
+        axios.get("/manage/user/list.do").then(res => {
+            // 失败代表着用户登录时间到了，提醒并更改登录状态
+            if (res.data.status !== 0) {
+                message.warning(res.data.msg);
+                window.localStorage.setItem("isLogin", false);
+                this.props.history.push("/login");
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+    }
+
     componentDidMount() {
         this.initUserName();
+        this.isLogin();
     }
     render() {
         const menu = (
@@ -75,4 +90,4 @@ class NavTop extends React.Component {
         </div>)
     }
 }
-export default NavTop
+export default withRouter(NavTop)

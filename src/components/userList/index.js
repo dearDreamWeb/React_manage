@@ -1,4 +1,5 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import ContentTitle from "../contentTitle";
 import "./index.scss";
 import axios from "axios";
@@ -17,26 +18,36 @@ const columns = [
         // width: '20%',
     },
     {
-        title: '密码',
-        dataIndex: 'password',
-    },
-    {
         title: '邮箱',
         dataIndex: 'email',
     },
     {
         title: '手机号',
         dataIndex: 'phone',
+    },
+    {
+        title: '注册时间',
+        dataIndex: 'createTime',
+        render: (data) => {
+            // 修改一下时间的格式，因为默认的时间格式有"上午"和"下午"这俩个词，所以替换成24小时制，
+            if (new Date(data).toLocaleString().includes("上午")) {
+                let time = new Date(data).toLocaleTimeString();
+                time = time.replace(new RegExp(/^上午/), " ");
+                return new Date(data).toLocaleDateString() + time;
+            } else {
+                let time = new Date(data).toLocaleTimeString().split(":");
+                time[0] = time[0].replace(new RegExp(/^下午/, "g"), "");
+                // 因为中午12点算是下午，所以当遇到12点就不加12了
+                if (parseInt(time[0]) !== 12) {
+                    time[0] = parseInt(time[0]) + 12;
+                }
+                time[0] = " " + time[0];
+                time = time.join(":");
+                return new Date(data).toLocaleDateString() + time;
+            }
+        }
     }
 ];
-
-// const getRandomuserParams = params => {
-//     return {
-//         results: params.pagination.pageSize,
-//         page: params.pagination.current,
-//         ...params,
-//     };
-// };
 
 class UsersList extends React.Component {
     constructor(props) {
@@ -117,8 +128,6 @@ class UsersList extends React.Component {
                     data: res.data.data.list,
                     loading: false
                 })
-            } else {
-                message.warning(res.data.msg);
             }
         }).catch(err => {
             console.log(err);
@@ -145,4 +154,4 @@ class UsersList extends React.Component {
         );
     }
 }
-export default UsersList
+export default withRouter(UsersList)
