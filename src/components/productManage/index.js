@@ -3,56 +3,15 @@ import { withRouter } from "react-router-dom";
 import ContentTitle from "../contentTitle";
 import axios from "axios";
 import { Table, message } from 'antd';
+import "./index.scss";
 
-// 表头
-const columns = [
-    {
-        title: 'ID',
-        dataIndex: 'id',
-        // width: '20%',
-    },
-    {
-        title: '用户名',
-        dataIndex: 'username',
-        // width: '20%',
-    },
-    {
-        title: '邮箱',
-        dataIndex: 'email',
-    },
-    {
-        title: '手机号',
-        dataIndex: 'phone',
-    },
-    {
-        title: '注册时间',
-        dataIndex: 'createTime',
-        render: (data) => {
-            // 修改一下时间的格式，因为默认的时间格式有"上午"和"下午"这俩个词，所以替换成24小时制，
-            if (new Date(data).toLocaleString().includes("上午")) {
-                let time = new Date(data).toLocaleTimeString();
-                time = time.replace(new RegExp(/^上午/), " ");
-                return new Date(data).toLocaleDateString() + time;
-            } else {
-                let time = new Date(data).toLocaleTimeString().split(":");
-                time[0] = time[0].replace(new RegExp(/^下午/, "g"), "");
-                // 因为中午12点算是下午，所以当遇到12点就不加12了
-                if (parseInt(time[0]) !== 12) {
-                    time[0] = parseInt(time[0]) + 12;
-                }
-                time[0] = " " + time[0];
-                time = time.join(":");
-                return new Date(data).toLocaleDateString() + time;
-            }
-        }
-    }
-];
 
-class UsersList extends React.Component {
+
+class ProductManage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            // 用户数据
+            // 商品数据
             data: [],
             // 当前多少页，每页多少条数据
             pagination: {
@@ -64,11 +23,12 @@ class UsersList extends React.Component {
             // 是否开启加载动画
             loading: false,
         };
+
     }
 
     // 生命周期：组件加载完成
     componentDidMount() {
-        this.initUserCount();
+        this.initProductCount();
         this.inintData();
     }
 
@@ -79,7 +39,7 @@ class UsersList extends React.Component {
     handleTableChange = (pagination) => {
         axios({
             method: "get",
-            url: "/manage/user/list.do",
+            url: "/manage/product/list.do",
             params: {
                 pageSize: pagination.pageSize,
                 pageNum: pagination.current
@@ -100,12 +60,12 @@ class UsersList extends React.Component {
         })
     };
 
-    // 初始化用户总数
-    initUserCount() {
+    // 初始化商品总数
+    initProductCount() {
         axios.get("/manage/statistic/base_count.do").then(res => {
             if (res.data.status === 0) {
                 this.setState({
-                    pagination: Object.assign({}, this.state.pagination, { total: res.data.data.userCount })
+                    pagination: Object.assign({}, this.state.pagination, { total: res.data.data.productCount })
                 })
             }
         }).catch(err => {
@@ -113,12 +73,12 @@ class UsersList extends React.Component {
         });
     }
 
-    // 初始化用户数据
+    // 初始化商品数据
     inintData = () => {
         this.setState({ loading: true });
         axios({
             method: "get",
-            url: "/manage/user/list.do"
+            url: "/manage/product/list.do"
         }).then(res => {
             // 请求成功后数据赋值
             if (res.data.status === 0) {
@@ -133,11 +93,77 @@ class UsersList extends React.Component {
 
     };
 
+    // 改变商品的状态,第一个参数是整行数据，第二个参数是想要变成的状态
+    changeStatus(record, wantStatus) {
+        if (record.status !== wantStatus) {
+            axios({
+                method: "get",
+                url: "/manage/product/set_sale_status.do",
+                params: {
+                    productId: record.id,
+                    status: wantStatus
+                }
+            }).then(res => {
+                if(res.data.status === 0) {
+                    message.success(res.data.data);
+                    // 重新获取一下数据
+                    this.handleTableChange(this.state.pagination);
+                }else {
+                    message.error(res.data.data);
+                }
+            }).catch(err => {
+                console.log(err);
+            })
+        }
+    }
+
     render() {
+        // 表头
+        const columns = [
+            {
+                title: '商品ID',
+                dataIndex: 'id',
+                // width: '20%',
+            },
+            {
+                title: '商品信息',
+                dataIndex: 'name',
+                // width: '20%',
+            },
+            {
+                title: '价格',
+                dataIndex: 'price',
+                render: data => "￥" + data
+            },
+            {
+                title: '状态',
+                dataIndex: 'status',
+                width: '10%',
+                render: (data, record) => {
+                    return (<span className="statusWrap">
+                        <a
+                            className={`status ${data === 1 ? "active" : ""}`}
+                            onClick={() => this.changeStatus(record, 1)}
+                        >在售</a>
+                        <a
+                            className={`status ${data === 2 ? "active" : ""}`}
+                            onClick={() => this.changeStatus(record, 2)}
+                        >下架</a>
+                    </span>)
+                }
+            },
+            {
+                title: '操作',
+                width: '10%',
+                // dataIndex: 'phone',
+                render: () => <span className="optionWrap"><a className="option">详情</a><a className="option">编辑</a></span>
+            }
+        ];
+
         const { data, pagination, loading } = this.state;
         return (
-            <div className="usersList">
-                <ContentTitle title="用户列表" />
+            <div className="productManage">
+                <ContentTitle title="商品列表" />
                 <Table
                     style={{ overflow: "auto" }}
                     columns={columns}
@@ -152,4 +178,4 @@ class UsersList extends React.Component {
         );
     }
 }
-export default withRouter(UsersList)
+export default withRouter(ProductManage)
