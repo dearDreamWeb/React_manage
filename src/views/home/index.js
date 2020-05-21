@@ -17,7 +17,7 @@ class Home extends React.Component {
                 <NavTop></NavTop>
                 <Layout className="main" >
                     <NavSide></NavSide>
-                    <Layout className="content_layout">
+                    <Layout className="content_layout" style={{padding:"1rem"}}>
                         <Switch>
                             <Route exact path="/" component={Main} />
                             <Route path="/product/manage" component={ProductManage}></Route>

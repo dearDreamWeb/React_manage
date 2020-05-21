@@ -4,6 +4,7 @@ import ContentTitle from "../contentTitle";
 import axios from "axios";
 import { Table, message } from 'antd';
 import "./index.scss";
+import ProductSearch from "../productSearch";
 
 
 
@@ -22,6 +23,10 @@ class ProductManage extends React.Component {
             },
             // 是否开启加载动画
             loading: false,
+            // 查询类型
+            selectValue: "productId",
+            // 查询的关键词
+            keyWord: ""
         };
 
     }
@@ -37,20 +42,35 @@ class ProductManage extends React.Component {
      * @param     pagination 是antd组件封装好的参数，里面有current, pageSize total等参数
     */
     handleTableChange = (pagination) => {
-        axios({
-            method: "get",
-            url: "/manage/product/list.do",
-            params: {
+        // 做判断，如果搜索框里有关键词的话，就按照搜索的数据翻页，没有关键词的话，按照全部的数据翻页
+        let requestUrl = null,
+            requestParams = null;
+        if (this.state.keyWord) {
+            requestUrl = "/manage/product/search.do";
+            requestParams = {
+                [this.state.selectValue]: this.state.keyWord,
                 pageSize: pagination.pageSize,
                 pageNum: pagination.current
             }
+        } else {
+            requestUrl = "/manage/product/list.do";
+            requestParams = {
+                pageSize: pagination.pageSize,
+                pageNum: pagination.current
+            }
+        }
+
+        axios({
+            method: "get",
+            url: requestUrl,
+            params: requestParams
         }).then(res => {
             // 请求成功后数据赋值
             if (res.data.status === 0) {
                 this.setState({
                     data: res.data.data.list,
                     loading: false,
-                    pagination: Object.assign(this.state.pagination, pagination)
+                    pagination: Object.assign(this.state.pagination, pagination, { total: res.data.data.total })
                 })
             } else {
                 message.warning(res.data.msg);
@@ -104,11 +124,11 @@ class ProductManage extends React.Component {
                     status: wantStatus
                 }
             }).then(res => {
-                if(res.data.status === 0) {
+                if (res.data.status === 0) {
                     message.success(res.data.data);
                     // 重新获取一下数据
                     this.handleTableChange(this.state.pagination);
-                }else {
+                } else {
                     message.error(res.data.data);
                 }
             }).catch(err => {
@@ -117,13 +137,47 @@ class ProductManage extends React.Component {
         }
     }
 
+    /** 
+     * 搜索组件提交搜索框内容，过滤查找一下
+     * 更新一下state
+    */
+    searchChange(value) {
+        this.setState({
+            selectValue: value.selectValue,
+            keyWord: value.keyWord
+        }, () => {
+            if (value.keyWord === "") {
+                this.handleTableChange(this.state.pagination);
+            } else {
+                axios({
+                    method: "get",
+                    url: "/manage/product/search.do",
+                    params: {
+                        [value.selectValue]: value.keyWord
+                    }
+                }).then(res => {
+                    if (res.data.status === 0) {
+                        this.setState({
+                            data: res.data.data.list,
+                            pagination: Object.assign({}, this.state.pagination, { total: res.data.data.total })
+                        })
+                    }
+                }).catch(err => {
+                    console.log(err);
+                })
+            }
+        })
+
+
+    }
+
     render() {
         // 表头
         const columns = [
             {
                 title: '商品ID',
                 dataIndex: 'id',
-                // width: '20%',
+                // width: '4rem',
             },
             {
                 title: '商品信息',
@@ -164,6 +218,7 @@ class ProductManage extends React.Component {
         return (
             <div className="productManage">
                 <ContentTitle title="商品列表" />
+                <ProductSearch onChange={(value) => this.searchChange(value)} />
                 <Table
                     style={{ overflow: "auto" }}
                     columns={columns}

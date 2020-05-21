@@ -1,5 +1,5 @@
 .productManage {
-    // 状态列和操作列的样式
+  // 状态列和操作列的样式
   .optionWrap,
   .statusWrap {
     display: flex;
@@ -21,6 +21,17 @@
     .active {
       color: #fff;
       background: #f37a7a;
+    }
+  }
+}
+// 修改的antd中的td的格式，为了移动端表头不换行
+.ant-table-row {
+  .ant-table-cell {
+    &:nth-child(1) {
+      min-width: 5rem;
+    }
+    &:nth-child(2) {
+      min-width: 8rem;
     }
   }
 }
