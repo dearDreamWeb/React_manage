@@ -1,8 +1,9 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter, Link } from "react-router-dom";
 import ContentTitle from "../contentTitle";
 import axios from "axios";
-import { Table, message } from 'antd';
+import { Table, message, Button } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import "./index.scss";
 import ProductSearch from "../productSearch";
 
@@ -171,6 +172,11 @@ class ProductManage extends React.Component {
 
     }
 
+    // 点击编辑按钮跳转到对应的商品编辑页面
+    jumpProductEdit(data) {
+        this.props.history.push({ pathname: '/product/edit', state: { id: data.id } });
+    }
+
     render() {
         // 表头
         const columns = [
@@ -210,7 +216,10 @@ class ProductManage extends React.Component {
                 title: '操作',
                 width: '10%',
                 // dataIndex: 'phone',
-                render: () => <span className="optionWrap"><a className="option">详情</a><a className="option">编辑</a></span>
+                render: (data, record) => <span className="optionWrap">
+                    <a className="option">详情</a>
+                    <a className="option" onClick={() => this.jumpProductEdit(record)}>编辑</a>
+                </span>
             }
         ];
 
@@ -218,7 +227,16 @@ class ProductManage extends React.Component {
         return (
             <div className="productManage">
                 <ContentTitle title="商品列表" />
+                {/* 新增商品按钮 */}
+                <div className="addProduct">
+                    <Link to="/product/edit">
+                        <Button type="primary" shape="round" icon={<PlusOutlined />}  >
+                            添加商品
+                        </Button>
+                    </Link>
+                </div>
                 <ProductSearch onChange={(value) => this.searchChange(value)} />
+                {/* 表格 */}
                 <Table
                     style={{ overflow: "auto" }}
                     columns={columns}

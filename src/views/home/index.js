@@ -6,6 +6,7 @@ import NavSide from "../../components/navSide/index";  // 侧边导航
 import Main from "../../components/main/index";  // 内容区首页
 import UsersList from "../../components/userList/index";  // 用户列表
 import ProductManage from "../../components/productManage";  // 商品管理
+import ProductEdit from "../../components/productEdit";  // 商品管理
 import NotFound from "../../views/notFound";  // 404页面
 
 import { Layout } from 'antd';
@@ -21,6 +22,7 @@ class Home extends React.Component {
                         <Switch>
                             <Route exact path="/" component={Main} />
                             <Route path="/product/manage" component={ProductManage}></Route>
+                            <Route path="/product/edit" component={ProductEdit}></Route>
                             <Route path="/product/categories" component={Main}></Route>
                             <Route path="/order/manage" component={Main}></Route>
                             <Route path="/users/manage" component={UsersList} />
