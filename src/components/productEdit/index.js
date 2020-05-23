@@ -27,6 +27,49 @@ const ProductEdit = (props) => {
     const [form] = Form.useForm();
     const [firstCategory, setFirstCategory] = useState([]);
     const [secondCategory, setSecondCategory] = useState([]);
+    const [isDisabled, setIsDisabled] = useState(false); //当是详情页的话，输入框为不可调试
+
+    // 如果是查看详情，所有input不能更改
+    const changeInputDisabled = () => {
+        if (props.location.pathname === "/product/detail") {
+            setIsDisabled(true);
+        }
+    }
+
+    // 如果是编辑商品或者是查看商品详情，通过路由传参的id过去该商品的信息，并把信息入对应的表单中
+    const initEditData = () => {
+        if (props.location.state) {
+            axios({
+                method: "get",
+                url: "/manage/product/detail.do",
+                params: {
+                    productId: props.location.state.id
+                }
+            }).then(res => {
+                let objData = res.data.data;//将请求的数据赋值给objData变量
+                // 用正则清除标签
+                objData["detail"] = objData["detail"].replace(/<[a-zA-z]+>|<\/[a-zA-z]+>/g, "");
+
+                // antd 中设置表单某项的值
+                form.setFieldsValue(objData);
+
+                // 遍历数据，找到categoryId对应的数组，给表格赋值给对应的值
+                if (firstCategory.length > 0) {
+                    try {
+                        firstCategory.forEach(item => {
+                            if (objData.categoryId === item.id) {
+                                form.setFieldsValue({ categoryId: item.name })
+                                throw new Error("终止循环");
+                            }
+                        })
+                    } catch (error) { }
+                }
+            }).catch(err => {
+                console.log(err);
+            })
+        }
+
+    }
 
     // 校验name字段
     const validateProductName = (rule, value, callback) => {
@@ -74,26 +117,6 @@ const ProductEdit = (props) => {
         })
     }
 
-    // 如果是编辑商品，通过路由传参的id过去该商品的信息，并把信息入对应的表单中
-    const initEditData = () => {
-        axios({
-            method: "get",
-            url: "/manage/product/detail.do",
-            params: {
-                productId: props.location.state.id
-            }
-        }).then(res => {
-            let objData = res.data.data;
-            // 用正则清除标签
-            objData["detail"] = objData["detail"].replace(/<[a-zA-z]+>|<\/[a-zA-z]+>/g, "");
-            // console.log(firstCategory)
-            // antd 中设置表单某项的值
-            form.setFieldsValue(objData);
-        }).catch(err => {
-            console.log(err);
-        })
-    }
-
     // 当选择一级分类，给二级分类赋值
     const changeFirstCategory = (value) => {
         // antd 中设置表单某项的值
@@ -121,11 +144,16 @@ const ProductEdit = (props) => {
         return e && e.fileList;
     };
 
-    // 生命周期
+    // 生命周期组件初始化
     useEffect(() => {
         initProductCategory();
-        initEditData();
+        changeInputDisabled()
     }, [])
+
+    // 生命周期组件更新
+    useEffect(() => {
+        initEditData();
+    }, [firstCategory])
 
     return (
         <div className="productEdit">
@@ -148,7 +176,7 @@ const ProductEdit = (props) => {
                     ]}
                     hasFeedback
                 >
-                    <Input placeholder="请输入商品名称" />
+                    <Input placeholder="请输入商品名称" disabled={isDisabled} />
                 </Form.Item>
 
                 {/* 商品描述 */}
@@ -164,7 +192,7 @@ const ProductEdit = (props) => {
                         },
                     ]}
                 >
-                    <Input placeholder="请输入商品描述" />
+                    <Input placeholder="请输入商品描述" disabled={isDisabled} />
                 </Form.Item>
 
                 {/* 一级分类 */}
@@ -184,6 +212,7 @@ const ProductEdit = (props) => {
                         placeholder="请选择一级分类"
                         onChange={changeFirstCategory}
                         allowClear
+                        disabled={isDisabled}
                     >
                         {firstCategory.map(item => {
                             return (
@@ -213,6 +242,7 @@ const ProductEdit = (props) => {
                     <Select
                         placeholder="请选择二级分类"
                         allowClear
+                        disabled={isDisabled}
                     >
                         {secondCategory.map(item => {
                             return (
@@ -246,6 +276,7 @@ const ProductEdit = (props) => {
                         step="5"
                         formatter={value => `￥ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         parser={value => value.replace(/￥\s?|(,*)/g, '')}
+                        disabled={isDisabled}
                     />
                 </Form.Item>
 
@@ -268,6 +299,7 @@ const ProductEdit = (props) => {
                         step="5"
                         formatter={value => `${value}件`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
                         parser={value => value.replace(/件\s?|(,*)/g, '')}
+                        disabled={isDisabled}
                     />
                 </Form.Item>
 
@@ -280,7 +312,7 @@ const ProductEdit = (props) => {
                     getValueFromEvent={normFile}
                 >
                     <Upload name="upload_file" action="/manage/product/upload.do" listType="picture">
-                        <Button>
+                        <Button disabled={isDisabled}>
                             <UploadOutlined />点击上传
                         </Button>
                     </Upload>
@@ -299,11 +331,11 @@ const ProductEdit = (props) => {
                         },
                     ]}
                 >
-                    <Input.TextArea />
+                    <Input.TextArea disabled={isDisabled} />
                 </Form.Item>
 
                 {/* 提交 */}
-                <Form.Item {...formTailLayout} className="submit">
+                <Form.Item {...formTailLayout} className="submit" style={{ display: isDisabled ? "none" : false }}>
                     <Button type="primary" onClick={onCheck} block>
                         提交
                     </Button>

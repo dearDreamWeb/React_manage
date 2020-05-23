@@ -23,6 +23,7 @@ class Home extends React.Component {
                             <Route exact path="/" component={Main} />
                             <Route path="/product/manage" component={ProductManage}></Route>
                             <Route path="/product/edit" component={ProductEdit}></Route>
+                            <Route path="/product/detail" component={ProductEdit}></Route>
                             <Route path="/product/categories" component={Main}></Route>
                             <Route path="/order/manage" component={Main}></Route>
                             <Route path="/users/manage" component={UsersList} />

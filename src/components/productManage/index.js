@@ -172,6 +172,11 @@ class ProductManage extends React.Component {
 
     }
 
+    // 点击详情按钮跳转到对应商品的详情页面
+    jumpProductDetail(data) {
+        this.props.history.push({ pathname: '/product/detail', state: { id: data.id } });
+    }
+
     // 点击编辑按钮跳转到对应的商品编辑页面
     jumpProductEdit(data) {
         this.props.history.push({ pathname: '/product/edit', state: { id: data.id } });
@@ -217,7 +222,7 @@ class ProductManage extends React.Component {
                 width: '10%',
                 // dataIndex: 'phone',
                 render: (data, record) => <span className="optionWrap">
-                    <a className="option">详情</a>
+                    <a className="option" onClick={() => this.jumpProductDetail(record)}>详情</a>
                     <a className="option" onClick={() => this.jumpProductEdit(record)}>编辑</a>
                 </span>
             }
