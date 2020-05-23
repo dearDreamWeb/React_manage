@@ -49,21 +49,24 @@ const ProductEdit = (props) => {
                 let objData = res.data.data;//将请求的数据赋值给objData变量
                 // 用正则清除标签
                 objData["detail"] = objData["detail"].replace(/<[a-zA-z]+>|<\/[a-zA-z]+>/g, "");
+                
+                
+                /**
+                 * 将传过来的图片转换成数组，
+                 * 因为传过来的图片数据是这样的：1.jpg,2.jpg 所以要把它转换数组[{uid:"1.jpg", url:"http://....1.jpg" }]
+                 */
+                let arr = objData["subImages"].split(",");
+                let imagesArr = [];
+                arr.forEach(item => {
+                    imagesArr.push({ uid: item, url: objData.imageHost + item })
+                })
+                objData["subImages"] = imagesArr;
+
+                // 把第一分类的值作为实参调用函数
+                changeFirstCategory(objData.parentCategoryId);
 
                 // antd 中设置表单某项的值
                 form.setFieldsValue(objData);
-
-                // 遍历数据，找到categoryId对应的数组，给表格赋值给对应的值
-                if (firstCategory.length > 0) {
-                    try {
-                        firstCategory.forEach(item => {
-                            if (objData.categoryId === item.id) {
-                                form.setFieldsValue({ categoryId: item.name })
-                                throw new Error("终止循环");
-                            }
-                        })
-                    } catch (error) { }
-                }
             }).catch(err => {
                 console.log(err);
             })
@@ -71,25 +74,21 @@ const ProductEdit = (props) => {
 
     }
 
-    // 校验name字段
-    const validateProductName = (rule, value, callback) => {
-        // console.log(value)
-        // if (value !== "11") {
-        // console.log("aaa")
-        // return Promise.reject("");
-        // } else {
-        return Promise.resolve();
-        // }
-    }
-
     // 提交表单 ,提交成功返回商品管理界面
     const onCheck = async () => {
         try {
             const values = await form.validateFields();
+            // 将图片转换成数组，再转换成字符串，因为后端接口这样要求，我也没办法呀
+            let arr = [];
+            values.subImages.forEach(item => {
+                arr.push(item.response.data.uri);
+            })
+            let imagesString = arr.join(",");
+            // 请求数据
             axios({
                 method: "get",
                 url: "/manage/product/save.do",
-                params: { ...values }
+                params: Object.assign({}, values, { subImages: imagesString })
             }).then(res => {
                 if (res.data.status === 0) {
                     message.success(res.data.data);
@@ -169,12 +168,8 @@ const ProductEdit = (props) => {
                         {
                             required: true,
                             message: '内容不能为空',
-                        },
-                        {
-                            validator: validateProductName
                         }
                     ]}
-                    hasFeedback
                 >
                     <Input placeholder="请输入商品名称" disabled={isDisabled} />
                 </Form.Item>
@@ -198,7 +193,7 @@ const ProductEdit = (props) => {
                 {/* 一级分类 */}
                 <Form.Item
                     {...formItemLayout}
-                    name="productFirstCategory"
+                    name="parentCategoryId"
                     label="一级分类"
 
                     rules={[
@@ -306,12 +301,12 @@ const ProductEdit = (props) => {
                 {/* 商品图片 */}
                 <Form.Item
                     {...formItemLayout}
-                    name="upload"
+                    name="subImages"
                     label="商品图片"
                     valuePropName="fileList"
                     getValueFromEvent={normFile}
                 >
-                    <Upload name="upload_file" action="/manage/product/upload.do" listType="picture">
+                    <Upload name="upload_file" action="/manage/product/upload.do" listType="picture" disabled={isDisabled}>
                         <Button disabled={isDisabled}>
                             <UploadOutlined />点击上传
                         </Button>
