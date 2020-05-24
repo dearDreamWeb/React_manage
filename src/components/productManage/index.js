@@ -34,7 +34,6 @@ class ProductManage extends React.Component {
 
     // 生命周期：组件加载完成
     componentDidMount() {
-        this.initProductCount();
         this.inintData();
     }
 
@@ -81,18 +80,6 @@ class ProductManage extends React.Component {
         })
     };
 
-    // 初始化商品总数
-    initProductCount() {
-        axios.get("/manage/statistic/base_count.do").then(res => {
-            if (res.data.status === 0) {
-                this.setState({
-                    pagination: Object.assign({}, this.state.pagination, { total: res.data.data.productCount })
-                })
-            }
-        }).catch(err => {
-            console.log(err);
-        });
-    }
 
     // 初始化商品数据
     inintData = () => {
@@ -105,6 +92,7 @@ class ProductManage extends React.Component {
             if (res.data.status === 0) {
                 this.setState({
                     data: res.data.data.list,
+                    pagination: Object.assign({}, this.state.pagination, { total: res.data.data.total }),
                     loading: false
                 })
             }

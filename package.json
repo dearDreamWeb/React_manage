@@ -76,7 +76,8 @@
     "rules": {
       "jsx-a11y/anchor-is-valid": "off",
       "no-script-url": "off",
-      "react-hooks/exhaustive-deps": "off"
+      "react-hooks/exhaustive-deps": "off",
+      "array-callback-return": "off"
     }
   },
   "browserslist": {
