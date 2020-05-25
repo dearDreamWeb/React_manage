@@ -148,7 +148,7 @@ class ProductManage extends React.Component {
                     if (res.data.status === 0) {
                         this.setState({
                             data: res.data.data.list,
-                            pagination: Object.assign({}, this.state.pagination, { total: res.data.data.total })
+                            pagination: Object.assign({}, this.state.pagination, { current: 1, total: res.data.data.total })
                         })
                     }
                 }).catch(err => {

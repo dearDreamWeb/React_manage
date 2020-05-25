@@ -113,7 +113,7 @@ class ProductCategories extends React.Component {
                     data: filterDataArr,
                     // 当前页面的数据，页数乘以每页多少数据
                     currentPageData: filterDataArr.slice(0, this.state.pagination.pageSize * this.state.pagination.current - 1),
-                    pagination: Object.assign({}, this.state.pagination, { total: filterDataArr.length })
+                    pagination: Object.assign({}, this.state.pagination, {current: 1, total: filterDataArr.length })
                 })
                 // 提示用户是否查询成功
                 if (filterDataArr.length > 0) {

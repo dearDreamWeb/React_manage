@@ -56,7 +56,7 @@ class ProductSearch extends React.Component {
             <div className="select-wrap">
                 <Select defaultValue="productId" onChange={(value) => this.handleChange(value)}>
                     <Option value="productId">按{this.props.title ? this.props.title : "商品"}ID查询</Option>
-                    <Option value="productName">按{this.props.title ? this.props.title : "商品"}名字查询</Option>
+                    <Option value="productName" style={{ display: this.props.productNameVisible ? "none" : "block" }}>按{this.props.title ? this.props.title : "商品"}名字查询</Option>
                 </Select>
             </div>
             <div className="search-wrap">

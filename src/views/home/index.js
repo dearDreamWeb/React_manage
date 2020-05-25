@@ -9,6 +9,7 @@ import ProductManage from "../../components/productManage";  // 商品管理
 import ProductEdit from "../../components/productEdit";  // 商品编辑
 import ProductCategories from "../../components/productCategories";  // 商品分类
 import ProductAddCategory from "../../components/productAddCategory";  // 添加商品分类
+import OrderManage from "../../components/orderManage";  // 订单管理
 import NotFound from "../../views/notFound";  // 404页面
 
 import { Layout } from 'antd';
@@ -28,7 +29,7 @@ class Home extends React.Component {
                             <Route path="/product/detail" component={ProductEdit}></Route>
                             <Route exact path="/product/categories" component={ProductCategories}></Route>
                             <Route path="/product/categories/add" component={ProductAddCategory}></Route>
-                            <Route path="/order/manage" component={Main}></Route>
+                            <Route path="/order/manage" component={OrderManage}></Route>
                             <Route path="/users/manage" component={UsersList} />
                             <Route component={NotFound}></Route>
                         </Switch>
