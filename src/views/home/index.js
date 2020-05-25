@@ -7,7 +7,8 @@ import Main from "../../components/main/index";  // 内容区首页
 import UsersList from "../../components/userList/index";  // 用户列表
 import ProductManage from "../../components/productManage";  // 商品管理
 import ProductEdit from "../../components/productEdit";  // 商品编辑
-import ProductCategories from "../../components/productCategories";  // 商品编辑
+import ProductCategories from "../../components/productCategories";  // 商品分类
+import ProductAddCategory from "../../components/productAddCategory";  // 添加商品分类
 import NotFound from "../../views/notFound";  // 404页面
 
 import { Layout } from 'antd';
@@ -19,13 +20,14 @@ class Home extends React.Component {
                 <NavTop></NavTop>
                 <Layout className="main" >
                     <NavSide></NavSide>
-                    <Layout className="content_layout" style={{padding:"1rem"}}>
+                    <Layout className="content_layout" style={{ padding: "1rem" }}>
                         <Switch>
                             <Route exact path="/" component={Main} />
                             <Route path="/product/manage" component={ProductManage}></Route>
                             <Route path="/product/edit" component={ProductEdit}></Route>
                             <Route path="/product/detail" component={ProductEdit}></Route>
-                            <Route path="/product/categories" component={ProductCategories}></Route>
+                            <Route exact path="/product/categories" component={ProductCategories}></Route>
+                            <Route path="/product/categories/add" component={ProductAddCategory}></Route>
                             <Route path="/order/manage" component={Main}></Route>
                             <Route path="/users/manage" component={UsersList} />
                             <Route component={NotFound}></Route>

@@ -6,6 +6,7 @@ import { Table, message, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import "./index.scss";
 import ProductSearch from "../productSearch";
+import UpdateCategory from "../updateCategory";
 
 
 
@@ -29,7 +30,14 @@ class ProductCategories extends React.Component {
             // 查询类型
             selectValue: "productId",
             // 查询的关键词
-            keyWord: ""
+            keyWord: "",
+            // 模态框是否显示
+            modalVisibled: false,
+            // 修改的分类的信息
+            updateCategoryData: {
+                categoryId: null,
+                name: ""
+            }
         };
 
     }
@@ -110,7 +118,7 @@ class ProductCategories extends React.Component {
                 // 提示用户是否查询成功
                 if (filterDataArr.length > 0) {
                     message.success("查询成功")
-                }else {
+                } else {
                     message.warning("查询不到你想要的分类")
                 }
             }
@@ -120,9 +128,30 @@ class ProductCategories extends React.Component {
 
     }
 
-    // 点击详情按钮跳转到对应商品的详情页面
-    jumpProductDetail(data) {
-        this.props.history.push({ pathname: '/product/detail', state: { id: data.id } });
+    // 点击修改名称出现模态框
+    jumpGategoryUpdate(data) {
+        this.setState({
+            modalVisibled: true,
+            updateCategoryData: {
+                categoryId: data.id,
+                name: data.name
+            }
+        })
+    }
+
+    // 子组件请求父组件关闭模态框
+    closeModal() {
+        this.setState({
+            modalVisibled: false
+        })
+    }
+
+    // 分类更新完成,重新获取数据并关闭模态框
+    async updateOk() {
+        await this.inintData();
+        this.setState({
+            modalVisibled: false
+        })
     }
 
     render() {
@@ -142,7 +171,7 @@ class ProductCategories extends React.Component {
                 title: '操作',
                 // width: '10%',
                 render: (data, record) => <span className="optionWrap">
-                    <a className="option" onClick={() => this.jumpProductDetail(record)}>修改名称</a>
+                    <a className="option" onClick={() => this.jumpGategoryUpdate(record)}>修改名称</a>
                 </span>
             }
         ];
@@ -170,6 +199,14 @@ class ProductCategories extends React.Component {
                     loading={loading}           // 是否开启加载
                     onChange={this.handleTableChange}   // 分页改变触发回调函数
                     bordered={true}             // 是否显示边框
+                />
+
+                {/* 模态框，修改分类名称 */}
+                <UpdateCategory
+                    visible={this.state.modalVisibled}
+                    updateCategoryData={this.state.updateCategoryData}
+                    closeModal={() => this.closeModal()}
+                    updateOk={() => this.updateOk()}
                 />
             </div>
         );
