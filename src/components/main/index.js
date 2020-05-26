@@ -11,9 +11,9 @@ class Main extends React.Component {
         this.state = {
             // 数据
             count: [
-                { count: 0, title: "用户总数", jumpLink: "/user", icon: <UserOutlined />, background: "#66ef66" },
-                { count: 0, title: "商品总数", jumpLink: "/product", icon: <UnorderedListOutlined />, background: "#f9cb4a" },
-                { count: 0, title: "订单总数", jumpLink: "/order", icon: <DiffOutlined />, background: "#f93232" }
+                { count: 0, title: "用户总数", jumpLink: "/users/manage", icon: <UserOutlined />, background: "#66ef66" },
+                { count: 0, title: "商品总数", jumpLink: "/product/manage", icon: <UnorderedListOutlined />, background: "#f9cb4a" },
+                { count: 0, title: "订单总数", jumpLink: "/order/manage", icon: <DiffOutlined />, background: "#f93232" }
             ]
         }
     }
