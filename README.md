@@ -14,7 +14,7 @@
 
 
 ### 主界面
-![主界面](https://github.com/dearDreamWeb/React_manage/tree/master/src/images/首页.png)
+![主界面](https://github.com/dearDreamWeb/React_manage/tree/master/src/images/1.png)
 
 ### 商品管理
 ![商品管理](https://github.com/dearDreamWeb/React_manage/tree/master/src/images/商品管理页面.png)
