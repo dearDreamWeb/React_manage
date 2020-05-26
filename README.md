@@ -16,8 +16,8 @@
 ### 主界面
 ![主界面](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/首页.png)
 
-### 商品管理
-![商品管理](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/商品管理页面.png)
+### 商品管理界面
+![商品管理界面](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/商品管理页面界面.png)
 
 ### 添加商品界面
 ![添加商品界面](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/添加商品界面.png)
@@ -44,4 +44,4 @@
 ![移动端添加商品](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/移动端添加商品.png)
 
 ### 移动端订单详情
-![移动端订单详情](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/移动端订单详情.png)
+![移动端订单详情页](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/移动端订单详情页.png)
