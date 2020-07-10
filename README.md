@@ -14,34 +14,34 @@
 
 
 ### 主界面
-![主界面](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/首页.png)
+![主界面](https://s1.ax1x.com/2020/07/10/Uu6VeK.png)
 
 ### 商品管理界面
-![商品管理界面](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/商品管理界面.png)
+![商品管理界面](https://s1.ax1x.com/2020/07/10/Uu6CW9.png)
 
 ### 添加商品界面
-![添加商品界面](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/添加商品界面.png)
+![添加商品界面](https://s1.ax1x.com/2020/07/10/Uu6KWd.png)
 
 ### 管理员登录界面
-![管理员登录界面](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/管理员登录界面.png)
+![管理员登录界面](https://s1.ax1x.com/2020/07/10/Uu6PzR.png)
 
 ### 订单管理界面
-![订单管理界面](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/订单管理界面.png)
+![订单管理界面](https://s1.ax1x.com/2020/07/10/Uu6AL6.png)
 
 ### 订单详情界面
-![订单详情界面](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/订单详情界面.png)
+![订单详情界面](https://s1.ax1x.com/2020/07/10/Uu6ksx.png)
 
 ### 分类管理界面
-![分类管理界面](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/分类管理界面.png)
+![分类管理界面](https://s1.ax1x.com/2020/07/10/Uu6FQ1.png)
 
 ### 移动端首页
-![移动端首页](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/移动端首页.png)
+![移动端首页](https://s1.ax1x.com/2020/07/10/Uu6eoD.png)
 
 ### 移动端商品管理
-![移动端商品管理](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/移动端商品管理.png)
+![移动端商品管理](https://s1.ax1x.com/2020/07/10/Uu6uJH.png)
 
 ### 移动端添加商品
-![移动端添加商品](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/移动端添加商品.png)
+![移动端添加商品](https://s1.ax1x.com/2020/07/10/Uu6QSA.png)
 
 ### 移动端订单详情
-![移动端订单详情页](https://raw.githubusercontent.com/dearDreamWeb/React_manage/master/src/images/移动端订单详情页.png)
+![移动端订单详情页](https://s1.ax1x.com/2020/07/10/Uu6nFe.png)
